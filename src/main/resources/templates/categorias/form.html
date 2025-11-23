@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2" th:text="${categoria.id != null ? 'Editar Categoria' : 'Nova Categoria'}"></h1>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form th:action="${categoria.id != null ? '/categorias/atualizar/' + categoria.id : '/categorias/salvar'}" 
+                      th:object="${categoria}" method="post">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
+                        <div th:if="${#fields.hasErrors('nome')}" class="text-danger" th:errors="*{nome}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricao" th:field="*{descricao}" rows="4"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Salvar
+                    </button>
+                    <a th:href="@{/categorias}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

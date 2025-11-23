@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Detalhes da Devolução</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Informações do Empréstimo</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">Livro:</dt>
+                    <dd class="col-sm-9" th:text="${devolucao.emprestimo.livro.titulo}"></dd>
+
+                    <dt class="col-sm-3">Usuário:</dt>
+                    <dd class="col-sm-9" th:text="${devolucao.emprestimo.usuario.nome}"></dd>
+
+                    <dt class="col-sm-3">Data do Empréstimo:</dt>
+                    <dd class="col-sm-9" th:text="${#temporals.format(devolucao.emprestimo.dataEmprestimo, 'dd/MM/yyyy')}"></dd>
+
+                    <dt class="col-sm-3">Data Prevista:</dt>
+                    <dd class="col-sm-9" th:text="${#temporals.format(devolucao.emprestimo.dataPrevistaDevolucao, 'dd/MM/yyyy')}"></dd>
+                </dl>
+
+                <h5 class="card-title mt-4">Informações da Devolução</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">Data de Devolução:</dt>
+                    <dd class="col-sm-9" th:text="${#temporals.format(devolucao.dataDevolucao, 'dd/MM/yyyy')}"></dd>
+
+                    <dt class="col-sm-3">Dias de Atraso:</dt>
+                    <dd class="col-sm-9">
+                        <span th:if="${devolucao.diasAtraso > 0}" class="badge bg-danger" th:text="${devolucao.diasAtraso}"></span>
+                        <span th:if="${devolucao.diasAtraso == 0}" class="badge bg-success">0</span>
+                    </dd>
+
+                    <dt class="col-sm-3">Multa:</dt>
+                    <dd class="col-sm-9">
+                        <span class="h5" th:text="${'R$ ' + #numbers.formatDecimal(devolucao.multa, 0, 2)}"></span>
+                    </dd>
+
+                    <dt class="col-sm-3">Observações:</dt>
+                    <dd class="col-sm-9" th:text="${devolucao.observacoes != null ? devolucao.observacoes : 'Nenhuma'}"></dd>
+                </dl>
+
+                <a th:href="@{/devolucoes}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

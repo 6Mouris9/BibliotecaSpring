@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2" th:text="${emprestimo.id != null ? 'Editar Empréstimo' : 'Novo Empréstimo'}"></h1>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form th:action="${emprestimo.id != null ? '/emprestimos/atualizar/' + emprestimo.id : '/emprestimos/salvar'}" 
+                      th:object="${emprestimo}" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="livro" class="form-label">Livro <span class="text-danger">*</span></label>
+                            <select class="form-select" id="livro" th:field="*{livro}" required>
+                                <option value="">Selecione um livro</option>
+                                <option th:each="l : ${livros}" 
+                                        th:value="${l.id}" 
+                                        th:text="${l.titulo + ' - Disponível: ' + l.quantidadeDisponivel}"
+                                        th:selected="${emprestimo.livro != null && emprestimo.livro.id == l.id}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('livro')}" class="text-danger" th:errors="*{livro}"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="usuario" class="form-label">Usuário <span class="text-danger">*</span></label>
+                            <select class="form-select" id="usuario" th:field="*{usuario}" required>
+                                <option value="">Selecione um usuário</option>
+                                <option th:each="u : ${usuarios}" 
+                                        th:value="${u.id}" 
+                                        th:text="${u.nome}"
+                                        th:selected="${emprestimo.usuario != null && emprestimo.usuario.id == u.id}"></option>
+                            </select>
+                            <div th:if="${#fields.hasErrors('usuario')}" class="text-danger" th:errors="*{usuario}"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="dataEmprestimo" class="form-label">Data do Empréstimo</label>
+                            <input type="date" class="form-control" id="dataEmprestimo" th:field="*{dataEmprestimo}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="dataPrevistaDevolucao" class="form-label">Data Prevista de Devolução</label>
+                            <input type="date" class="form-control" id="dataPrevistaDevolucao" th:field="*{dataPrevistaDevolucao}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3" th:if="${emprestimo.id != null}">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" th:field="*{status}">
+                            <option value="ATIVO">Ativo</option>
+                            <option value="DEVOLVIDO">Devolvido</option>
+                            <option value="ATRASADO">Atrasado</option>
+                            <option value="CANCELADO">Cancelado</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="observacoes" class="form-label">Observações</label>
+                        <textarea class="form-control" id="observacoes" th:field="*{observacoes}" rows="3"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Salvar
+                    </button>
+                    <a th:href="@{/emprestimos}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

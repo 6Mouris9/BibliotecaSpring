@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout}">
+<body>
+    <div th:fragment="content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Livros</h1>
+            <a th:href="@{/livros/novo}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Novo Livro
+            </a>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/livros}" method="get" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="titulo" th:value="${tituloFiltro}" placeholder="Buscar por título...">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="isbn" th:value="${isbnFiltro}" placeholder="Buscar por ISBN...">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="bi bi-search"></i> Buscar
+                            </button>
+                            <a th:href="@{/livros}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Limpar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Autor</th>
+                                <th>Editora</th>
+                                <th>Categoria</th>
+                                <th>Disponível</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="livro : ${livros}">
+                                <td th:text="${livro.id}"></td>
+                                <td th:text="${livro.titulo}"></td>
+                                <td th:text="${livro.autor.nome}"></td>
+                                <td th:text="${livro.editora.nome}"></td>
+                                <td th:text="${livro.categoria.nome}"></td>
+                                <td>
+                                    <span th:if="${livro.quantidadeDisponivel > 0}" class="badge bg-success" th:text="${livro.quantidadeDisponivel}"></span>
+                                    <span th:if="${livro.quantidadeDisponivel == 0}" class="badge bg-danger">0</span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/livros/editar/{id}(id=${livro.id})}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a th:href="@{/livros/excluir/{id}(id=${livro.id})}" 
+                                       class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Tem certeza que deseja excluir este livro?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(livros)}">
+                                <td colspan="7" class="text-center">Nenhum livro encontrado</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

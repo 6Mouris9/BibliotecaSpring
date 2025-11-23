@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pivot - Empréstimos por Mês e Categoria - Sistema de Biblioteca</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/oldstyle.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+        }
+        .main-content {
+            min-height: calc(100vh - 56px);
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{layout :: layout}">
+        <div th:fragment="content">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Pivot - Empréstimos por Mês e Categoria</h1>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form th:action="@{/consultas/pivot-emprestimos}" method="get">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="ano" class="form-label">Ano</label>
+                                <input type="number" class="form-control" id="ano" name="ano" th:value="${ano}" min="2000" max="2100">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">&nbsp;</label>
+                                <div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-search"></i> Filtrar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th th:each="mes : ${meses}" th:text="${mes}"></th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="categoria : ${categorias}">
+                                    <td th:text="${categoria}"></td>
+                                    <td th:each="mes : ${meses}" 
+                                        th:class="${pivot.get(categoria).get(mes) > 0 ? 'table-success' : ''}"
+                                        th:text="${pivot.get(categoria).get(mes)}"></td>
+                                    <th th:text="${totaisPorCategoria.get(categoria)}"></th>
+                                </tr>
+                                <tr class="table-info">
+                                    <th>Total</th>
+                                    <th th:each="mes : ${meses}" th:text="${totaisPorMes.get(mes)}"></th>
+                                    <th th:text="${totalGeral}"></th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
